@@ -21,5 +21,14 @@ r = B.get('country')
 print(f"Compare B: {x}, a {y}, from {r}")
 score_A = A.get('follower_count')
 score_B = B.get('follower_count')
-select = input("Who has more followers? Type 'A' or 'B':")
 
+select = input("Who has more followers? Type 'A' or 'B':")
+maximum = max(score_A, score_B)
+#if score_A > score_B:
+#  print(score_A)
+ # else:
+  #  print(score_B)
+if select == maximum:
+  print("You win")
+else:
+  print("You lose")
