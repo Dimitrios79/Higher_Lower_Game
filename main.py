@@ -1,34 +1,60 @@
-from art import logo
-from art import vs
-from game_data import data
 import random
+from art import logo, vs
+from replit import clear
+from game_data import data
 
-print(logo)
+def get_random_account():
+  """Get data from random account"""
+  return random.choice(data)
 
-A = random.choice(data)
-B = random.choice(data)
+def format_data(account):
+  """Format account into printable format: name, description and country"""
+  name = account["name"]
+  description = account["description"]
+  country = account["country"]
+  # print(f'{name}: {account["follower_count"]}')
+  return f"{name}, a {description}, from {country}"
 
-x = A.get('name')
-y = A.get('description')
-r = A.get('country')
-print(f"Compare A: {x}, a {y}, from {r}")
+def check_answer(guess, a_followers, b_followers):
+  """Checks followers against user's guess 
+  and returns True if they got it right.
+  Or False if they got it wrong.""" 
+  if a_followers > b_followers:
+    return guess == "a"
+  else:
+    return guess == "b"
 
-print(vs)
 
-x = B.get('name')
-y = B.get('description')
-r = B.get('country')
-print(f"Compare B: {x}, a {y}, from {r}")
-score_A = A.get('follower_count')
-score_B = B.get('follower_count')
+def game():
+  print(logo)
+  score = 0
+  game_should_continue = True
+  account_a = get_random_account()
+  account_b = get_random_account()
 
-select = input("Who has more followers? Type 'A' or 'B':")
-maximum = max(score_A, score_B)
-#if score_A > score_B:
-#  print(score_A)
- # else:
-  #  print(score_B)
-if select == maximum:
-  print("You win")
-else:
-  print("You lose")
+  while game_should_continue:
+    account_a = account_b
+    account_b = get_random_account()
+
+    while account_a == account_b:
+      account_b = get_random_account()
+
+    print(f"Compare A: {format_data(account_a)}.")
+    print(vs)
+    print(f"Against B: {format_data(account_b)}.")
+    
+    guess = input("Who has more followers? Type 'A' or 'B': ").lower()
+    a_follower_count = account_a["follower_count"]
+    b_follower_count = account_b["follower_count"]
+    is_correct = check_answer(guess, a_follower_count, b_follower_count)
+
+    clear()
+    print(logo)
+    if is_correct:
+      score += 1
+      print(f"You're right! Current score: {score}.")
+    else:
+      game_should_continue = False
+      print(f"Sorry, that's wrong. Final score: {score}")
+
+game()
